@@ -3,11 +3,9 @@ import random
 
 data = {}
 
+questionsToKeep = [2, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 20, 22, 23, 24]
 
-
-questionsToKeep = [1, 2, 4, 5, 11, 12, 13, 14, 15, 19, 22, 23]
-
-with open("qcm.csv", mode='r') as csv_file:
+with open("qcm.csv", mode='r', encoding="utf-8") as csv_file:
 	csv_reader = csv.reader(csv_file, delimiter=";")
 	line_count = 0
 	for row in csv_reader:
@@ -29,7 +27,7 @@ for question in data.keys():
 
 dataToWrite = [""] * (len(data[t]) + 1)
 for question in questionsToKeep:
-	key = list(data.keys())[question]
+	key = list(data.keys())[question-1]
 	dataToWrite[0] += key + ";"
 	for i in range(len(data[key])):
 		dataToWrite[i+1] += data[key][i] + ";"

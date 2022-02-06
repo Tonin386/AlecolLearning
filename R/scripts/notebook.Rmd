@@ -8,7 +8,7 @@ Try executing this chunk by clicking the *Run* button within the chunk or by pla
 
 ```{r}
 library(ltm)
-reponses <- read.csv2("~/AlecolLearning/R/data/qcm_1_2_4_5_11_12_13_14_15_19_22_23.csv")
+reponses <- read.csv2("../data/qcm.csv")
 
 # Assessing the data
 dsc<-descript(reponses)
