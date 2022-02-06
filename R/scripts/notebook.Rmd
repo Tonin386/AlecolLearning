@@ -1,0 +1,154 @@
+---
+title: "audit QCM15-126"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(ltm)
+reponses <- read.csv2("~/AlecolLearning/R/data/qcm_1_2_4_5_11_12_13_14_15_19_22_23.csv")
+
+# Assessing the data
+dsc<-descript(reponses)
+dsc
+
+```
+
+# Section ITR-1pl
+```{r}
+# Construit le modèle IRT-1pl
+IRT_1pl <- rasch(reponses,IRT.param = TRUE)
+#IRT_1pl <- rasch(reponses,start.val="random")
+```
+```{r}
+# Test l'unidimensionnalité du test
+results <- unidimTest(IRT_1pl)
+plot(results, type = "b", pch = 1:2)
+legend("topright", c("Real Data", "Average Simulated Data"), lty = 1, pch = 1:2, col = 1:2, bty = "n")
+results
+View(results$Rho)
+```
+
+```{r}
+GoF.rasch(IRT_1pl)
+```
+```{r}
+# Summary of the model
+sum <- summary(IRT_1pl)
+sum
+```
+
+```{r}
+# Covariance matrix and vector of sqrt(variance) for each item
+vc<-vcov(IRT_1pl, robust=FALSE)
+vc
+sqrt(diag(vc))
+```
+# item fit
+```{r}
+item.fit(IRT_1pl, G=3)
+
+```
+
+#item difficulty level
+```{r}
+coef(IRT_1pl, prob= TRUE,order=TRUE)
+```
+# Person fit
+```{r}
+persFit <- person.fit(IRT_1pl,resp.patterns = reponses, alternative = c("greater"))
+persFit
+```
+
+# Ability
+```{r}
+# il est important de passer reponses en paramètre (sinon on risque de ne pas prendre en compte toutes les données)
+est_1pl<-factor.scores(IRT_1pl, resp.patterns = reponses, method=c("EB"), return.MIvalues = TRUE)
+est_1pl$score.dat$z1
+```
+
+# Curve of density=f(ability)
+```{r}
+est_1pl<-factor.scores(IRT_1pl, resp.patterns = NULL, method=c("EB"), return.MIvalues = TRUE)
+plot(est_1pl, include.items = FALSE, main="Curve of density=f(ability)")
+
+```
+
+#Items curves
+```{r}
+#item characteristic curve
+plot(IRT_1pl,type ="ICC")
+
+#item information curve
+plot(IRT_1pl,type="IIC")
+plot(IRT_1pl,type="IIC",items = 0)
+
+```
+# Section ITR-2pl
+```{r}
+# Construit le modèle IRT-1pl
+IRT_2pl <- ltm(reponses~z1,IRT.param = TRUE)
+
+```
+```{r}
+# Test l'unidimensionnalité du test
+unidimTest(IRT_2pl)
+```
+
+```{r}
+# Summary of the model
+summary(IRT_2pl)
+```
+# comparison with IRT-1pl model
+```{r}
+anova(IRT_1pl, IRT_2pl)
+```
+
+```{r}
+# Covariance matrix and vector of sqrt(variance) for each item
+vc<-vcov(IRT_2pl, robust=FALSE)
+vc
+sqrt(diag(vc))
+```
+# item fit
+```{r}
+item.fit(IRT_2pl, G=3)
+
+```
+
+#item difficulty level
+```{r}
+coef(IRT_2pl, prob= TRUE,order=TRUE)
+```
+# Person fit
+```{r}
+persFit <- person.fit(IRT_2pl,resp.patterns = reponses, alternative = c("greater"))
+persFit
+```
+
+# Ability
+```{r}
+# il est important de passer reponses en paramètre (sinon on risque de ne pas prendre en compte toutes les données)
+est_2pl<-factor.scores(IRT_2pl, resp.patterns = reponses, method=c("EB"), return.MIvalues = TRUE)
+est_2pl$score.dat$z1
+```
+
+# Curve of density=f(ability)
+```{r}
+est_2pl<-factor.scores(IRT_2pl, resp.patterns = NULL, method=c("EB"), return.MIvalues = TRUE)
+plot(est_2pl, include.items = FALSE, main="Curve of density=f(ability)")
+
+```
+
+#Items curves
+```{r}
+#item characteristic curve
+plot(IRT_2pl,type ="ICC")
+
+#item information curve
+plot(IRT_2pl,type="IIC")
+plot(IRT_2pl,type="IIC",items = 0)
+
+```
