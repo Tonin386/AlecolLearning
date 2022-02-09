@@ -3,7 +3,7 @@ import random
 
 data = {}
 
-questionsToKeep = [2, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 20, 22, 23, 24]
+questionsToKeep = [2,3,4,5,6,8,9,11,12,13,14,15,16,17,18,20,21,23,24]
 
 with open("qcm.csv", mode='r', encoding="utf-8") as csv_file:
 	csv_reader = csv.reader(csv_file, delimiter=";")
